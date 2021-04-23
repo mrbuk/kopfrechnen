@@ -68,7 +68,7 @@ Vue.component('aufgabe-item', {
             <div class="table-cell">&nbsp;{{ aufgabe.operator }}&nbsp;</div>
             <div class="table-cell">{{ aufgabe.y }}</div>
             <div class="table-cell">&nbsp;=&nbsp;</div>
-            <div class="table-cell"><input v-model="aufgabe.eingabe" size="3"></div>
+            <div class="table-cell"><input type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe"></div>
             <div class="table-cell">&nbsp;{{ aufgabe.pruefung }}&nbsp;</div>
         </div>`
 })

@@ -4,11 +4,22 @@
         <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <style>
-            div, input {
-                font-family: monospace;
-                font-size: 28pt;
-                /* margin-bottom: 50px; */
+            @media print {
+                button {
+                    display: none;
+                }
             }
+            div, input, button {
+                font-family: monospace;
+                font-size: 18pt;
+                margin-bottom: 10pt;
+            }
+            button {
+                font-family: monospace;
+                font-size: 18pt;
+                margin-bottom: 10pt;
+            }
+
             .table {
                 margin-left: auto;
                 margin-right: auto;
@@ -19,6 +30,13 @@
                 display: table-cell;
                 width: auto;
                 text-align: right;
+                padding-left: 10pt;
+            }
+            .correct {
+                background-color: #ddffdd;
+            }
+            .wrong {
+                background-color: #ffdddd;
             }
         </style>
     </head>

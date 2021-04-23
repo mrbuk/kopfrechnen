@@ -31,10 +31,10 @@ UebergangAllgemein = (xMax, yMax, operator, condition) => {
             s = aufgabeToString(aufgabe)
             aufgabeDoesntExist = aufgabenStringList.indexOf(s) == -1
 
-            // vermeide Duplikate
             if (aufgabeDoesntExist && condition(aufgabe)) {
-                aufgabenStringList.push(aufgabe)
+                aufgabenStringList.push(s)
                 conditionsMet = true
+
                 data.aufgabeList.push(aufgabe)
             }
         } while (!conditionsMet)
@@ -44,6 +44,11 @@ UebergangAllgemein = (xMax, yMax, operator, condition) => {
 
 Vue.component('aufgabe-item', {
     props: ['aufgabe'],
+    data: function() {
+        return  {
+            inputClass: ""
+        }
+    },
     computed: { 
         ergebnis: function() {
             a = this.aufgabe
@@ -55,12 +60,23 @@ Vue.component('aufgabe-item', {
             }
         }
     },
+    methods: {
+        pruefe: function() {
+            if (this.aufgabe.eingabe == this.ergebnis) {
+                this.aufgabe.pruefung = "richtig!"
+                this.inputClass = "correct"
+            } else {
+                this.aufgabe.pruefung = ""
+                this.inputClass = "wrong"
+            }
+        }
+    },
     watch: {
-       'aufgabe.eingabe': function(value) {
-           if (value == this.ergebnis) {
-               this.aufgabe.pruefung = "richtig!"
-           }
-       } 
+        'aufgabe.eingabe': function(value, previous) {
+            if (value != previous) {
+                this.inputClass = ""
+            }
+        }
     },
     template: `
         <div class="table-row">
@@ -68,8 +84,8 @@ Vue.component('aufgabe-item', {
             <div class="table-cell">&nbsp;{{ aufgabe.operator }}&nbsp;</div>
             <div class="table-cell">{{ aufgabe.y }}</div>
             <div class="table-cell">&nbsp;=&nbsp;</div>
-            <div class="table-cell"><input type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe"></div>
-            <div class="table-cell">&nbsp;{{ aufgabe.pruefung }}&nbsp;</div>
+            <div class="table-cell"><input :class="inputClass" type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe"></div>
+            <div class="table-cell"><button @click="pruefe">OK</button></div>
         </div>`
 })
 

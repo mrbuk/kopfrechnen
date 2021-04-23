@@ -1,0 +1,39 @@
+<html>
+    <head>
+        <title>Kopfrechnen</title>
+        <meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; user-scalable=0;" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <style>
+            div, input {
+                font-family: monospace;
+                font-size: 28pt;
+                /* margin-bottom: 50px; */
+            }
+            .table {
+                margin-left: auto;
+                margin-right: auto;
+                display: table;
+            }
+            .table-row {display: table-row; }
+            .table-cell {
+                display: table-cell;
+                width: auto;
+                text-align: right;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app">
+            <button v-on:click="UebergangPlus">10er &Uuml;bergang - Plus</button>
+            <button v-on:click="UebergangMinus">10er &Uuml;bergang - Minus</button>
+            <div class="table">
+                <aufgabe-item
+                    v-for="item in aufgabeList"
+                    v-bind:aufgabe="item"
+                    v-bind:key="item.id"></aufgabe-item>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+        <script src="app.js"></script>
+    </body>
+</html>

@@ -87,6 +87,10 @@ Vue.component('aufgabe-item', {
     },
     methods: {
         pruefe: function() {
+            if (this.aufgabe.eingabe == null) {
+                return
+            }
+            
             if (this.aufgabe.eingabe == this.ergebnis) {
                 this.aufgabe.pruefung = "richtig!"
                 this.inputClass = "correct"

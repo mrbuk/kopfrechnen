@@ -51,14 +51,17 @@ UebergangAllgemein = (xMax, yMax, operator, condition) => {
             }
         } while (!conditionsMet)
     }
-}
 
+    app.startTimer()
+}
 
 Vue.component('aufgabe-item', {
     props: ['aufgabe'],
     data: function() {
-        return  {
-            inputClass: ""
+        return {
+            inputClass: "",
+            disabled: false,
+            duration: null
         }
     },
     computed: { 
@@ -74,6 +77,12 @@ Vue.component('aufgabe-item', {
                 case ":":
                     return a.x / a.y
             }
+        },
+        durationText: function() {
+            if (this.duration == null) {
+                return ""
+            }
+            return this.duration + "s"
         }
     },
     methods: {
@@ -81,16 +90,23 @@ Vue.component('aufgabe-item', {
             if (this.aufgabe.eingabe == this.ergebnis) {
                 this.aufgabe.pruefung = "richtig!"
                 this.inputClass = "correct"
+                this.disabled = true
             } else {
                 this.aufgabe.pruefung = ""
                 this.inputClass = "wrong"
+                this.disabled = true
             }
+            currentTime = this.$root.$data.timer
+            this.duration = currentTime - this.$root.$data.lastOperation
+            this.$root.$data.lastOperation = currentTime
         }
     },
     watch: {
         'aufgabe.eingabe': function(value, previous) {
             if (value != previous) {
-                this.inputClass = ""
+                this.inputClass = "",
+                this.disabled = false,
+                this.duration = null
             }
         }
     },
@@ -100,13 +116,17 @@ Vue.component('aufgabe-item', {
             <div class="table-cell">&nbsp;{{ aufgabe.operator }}&nbsp;</div>
             <div class="table-cell">{{ aufgabe.y }}</div>
             <div class="table-cell">&nbsp;=&nbsp;</div>
-            <div class="table-cell"><input :class="inputClass" type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe"></div>
+            <div class="table-cell"><input :class="inputClass" type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe" :disabled="disabled"></div>
             <div class="table-cell"><button @click="pruefe">OK</button></div>
+            <div class="table-cell">{{ durationText }}</div> 
         </div>`
 })
 
 var data = {
-    aufgabeList: []
+    aufgabeList: [],
+    timerInterval: null,
+    timer: 0,
+    lastOperation: 0
 }
 
 var app = new Vue({
@@ -116,6 +136,15 @@ var app = new Vue({
         UebergangPlus: UebergangPlus,
         UebergangMinus: UebergangMinus,
         UebergangMultiplizieren: UebergangMultiplizieren,
-        UebergangDividieren: UebergangDividieren
+        UebergangDividieren: UebergangDividieren,
+        startTimer: function() {
+            this.timer = 0
+            clearInterval(this.timerInterval)
+            this.timerInterval = setInterval(() => (this.timer += 1), 1000);
+        },  
+        stopTimer: function() {
+            this.timer = 0
+            clearInterval(this.timerInterval)
+        }
     }
 })

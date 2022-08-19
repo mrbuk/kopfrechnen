@@ -15,6 +15,18 @@ UebergangMinus = () => {
     })
 }
 
+UebergangMultiplizieren = () => {
+    UebergangAllgemein(10, 10, '*', (aufgabe) => {
+        return (aufgabe.x * aufgabe.y) <= 90
+    })
+}
+
+UebergangDividieren = () => {
+    UebergangAllgemein(90, 10, ':', (aufgabe) => {
+        return aufgabe.x % aufgabe.y == 0 && aufgabe.x / aufgabe.y <= 10 && aufgabe.x > aufgabe.y
+    })
+}
+
 UebergangAllgemein = (xMax, yMax, operator, condition) => {
     data.aufgabeList = []
     var aufgabenStringList = []
@@ -52,11 +64,15 @@ Vue.component('aufgabe-item', {
     computed: { 
         ergebnis: function() {
             a = this.aufgabe
-            if (a.operator == "+") {
-                return a.x + a.y
-            }
-            else if (a.operator == "-") {
-                return a.x - a.y
+            switch (a.operator) {
+                case "+":
+                    return a.x + a.y
+                case "-":
+                    return a.x - a.y
+                case "*":
+                    return a.x * a.y
+                case ":":
+                    return a.x / a.y
             }
         }
     },
@@ -98,6 +114,8 @@ var app = new Vue({
     data: data, 
     methods: {
         UebergangPlus: UebergangPlus,
-        UebergangMinus: UebergangMinus
+        UebergangMinus: UebergangMinus,
+        UebergangMultiplizieren: UebergangMultiplizieren,
+        UebergangDividieren: UebergangDividieren
     }
 })

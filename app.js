@@ -28,7 +28,7 @@ UebergangDividieren = () => {
 }
 
 UebergangAllgemein = (xMax, yMax, operator, condition) => {
-    data.aufgabeList = []
+    app.reset()
     var aufgabenStringList = []
 
     for(i = 0; i < 15; i++) {    
@@ -90,7 +90,6 @@ Vue.component('aufgabe-item', {
             if (this.aufgabe.eingabe == null) {
                 return
             }
-            
             if (this.aufgabe.eingabe == this.ergebnis) {
                 this.aufgabe.pruefung = "richtig!"
                 this.inputClass = "correct"
@@ -103,6 +102,7 @@ Vue.component('aufgabe-item', {
             currentTime = this.$root.$data.timer
             this.duration = currentTime - this.$root.$data.lastOperation
             this.$root.$data.lastOperation = currentTime
+            this.$root.$data.itemsSubmitted++
         }
     },
     watch: {
@@ -120,14 +120,17 @@ Vue.component('aufgabe-item', {
             <div class="table-cell">&nbsp;{{ aufgabe.operator }}&nbsp;</div>
             <div class="table-cell">{{ aufgabe.y }}</div>
             <div class="table-cell">&nbsp;=&nbsp;</div>
-            <div class="table-cell"><input :class="inputClass" type="number" min="0" max="100" inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe" :disabled="disabled"></div>
-            <div class="table-cell"><button @click="pruefe">OK</button></div>
+            <div class="table-cell"><input :class="inputClass" type="number" min="0" max="100" autofocus
+                inputmode="numeric" pattern="[0-9]*" v-model="aufgabe.eingabe" :disabled="disabled" 
+                @keyup.enter="pruefe" ></div>
+            <div class="table-cell"><button @click="pruefe" :disabled="disabled">OK</button></div>
             <div class="table-cell">{{ durationText }}</div> 
         </div>`
 })
 
 var data = {
     aufgabeList: [],
+    itemsSubmitted: 0,
     timerInterval: null,
     timer: 0,
     lastOperation: 0
@@ -135,20 +138,32 @@ var data = {
 
 var app = new Vue({
     el: '#app',
-    data: data, 
+    data: data,
+    watch: {
+        itemsSubmitted: function(value) {
+            if (value == this.aufgabeList.length) {
+                this.stopTimer()
+            }
+        }
+    },
     methods: {
+        reset: function() {
+            this.lastOperation = 0
+            this.aufgabeList = []
+            this.itemsSubmitted = 0
+        },
         UebergangPlus: UebergangPlus,
         UebergangMinus: UebergangMinus,
         UebergangMultiplizieren: UebergangMultiplizieren,
         UebergangDividieren: UebergangDividieren,
         startTimer: function() {
             this.timer = 0
-            clearInterval(this.timerInterval)
+            this.lastOperation = 0
             this.timerInterval = setInterval(() => (this.timer += 1), 1000);
         },  
         stopTimer: function() {
-            this.timer = 0
             clearInterval(this.timerInterval)
+            this.timerInterval = null
         }
     }
 })

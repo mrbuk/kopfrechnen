@@ -157,6 +157,7 @@ var app = new Vue({
         UebergangMultiplizieren: UebergangMultiplizieren,
         UebergangDividieren: UebergangDividieren,
         startTimer: function() {
+            this.stopTimer()
             this.timer = 0
             this.lastOperation = 0
             this.timerInterval = setInterval(() => (this.timer += 1), 1000);

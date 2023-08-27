@@ -261,7 +261,7 @@ var app = new Vue({
     data: data,
     watch: {
         itemsSubmitted: function(value) {
-            if (value == this.aufgabeList.length) {
+            if (value == this.aufgabeList.length || value == this.aufgabeMinus1000List.length) {
                 this.stopTimer()
             }
         }

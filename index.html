@@ -32,6 +32,9 @@
                 text-align: right;
                 padding-left: 10pt;
             }
+            .center {
+                text-align: center;
+            }
             .correct {
                 background-color: #ddffdd;
             }
@@ -44,6 +47,7 @@
         <div id="app">
             <button v-on:click="UebergangPlus">Plus</button>
             <button v-on:click="UebergangMinus">Minus</button>
+            <button v-on:click="UebergangMinus1000">Minus 1000er</button>
             <button v-on:click="UebergangMultiplizieren">Mal</button>
             <button v-on:click="UebergangDividieren">Geteilt</button>
             <div>
@@ -54,6 +58,11 @@
                     v-for="item in aufgabeList"
                     v-bind:aufgabe="item"
                     v-bind:key="item.id"></aufgabe-item>
+                
+                <aufgabe-minus1000-item
+                    v-for="item in aufgabeMinus1000List"
+                    v-bind:aufgabe="item"
+                    v-bind:key="item.id"></aufgabe-minus100-item>
             </div>
         </div>
         <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
